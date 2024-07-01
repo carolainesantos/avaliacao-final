@@ -38,6 +38,10 @@ class UserController {
 
   async update(id, nome, email, senha) {
     const oldUser = await user.findByPk(id);
+    const sameEmail = await user.findOne({ where: { email } });
+    if (sameEmail && sameEmail.id !== id) {
+      throw new Error("Email já cadastrado.");
+    }
 
     oldUser.nome = nome || oldUser.nome;
     oldUser.email = email || oldUser.email;
